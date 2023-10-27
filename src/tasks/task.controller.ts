@@ -8,6 +8,25 @@ export const getAllTasks = async (req: Request, res: Response) => {
     res.json(tasks)
 }
 
+export const getOneTask = async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id)
+    if (!id) {
+        return res.status(400).json({ error: 'ID da tarefa inválido.' })
+    }
+    const task = await taskService.getOneTask(id)
+    res.json(task)
+}
+
+export const updateTask = async (req: Request, res: Response) => {
+    const id = parseInt(req.params.id)
+    const changeTask = req.body
+    if (!id) {
+        return res.status(400).json({ error: 'ID da tarefa inválido.' })
+    }
+    const task = await taskService.updateTask(id, changeTask)
+    res.json({ message: 'Tarefa alterada com sucesso.' })
+}
+
 export const createTask = async (req: Request, res: Response) => {
     const { description } = req.body
     if (!description) {
@@ -25,3 +44,5 @@ export const deleteTask = async (req: Request, res: Response) => {
     await taskService.deleteTask(id)
     res.json({ message: 'Tarefa removida com sucesso.' })
 }
+
+
