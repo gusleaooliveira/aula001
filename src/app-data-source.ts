@@ -1,4 +1,5 @@
 import { DataSource } from 'typeorm'
+import { Task } from './tasks/entity/task.entity'
 
 export const myDataSource = new DataSource({
     type: 'mysql',
@@ -6,7 +7,10 @@ export const myDataSource = new DataSource({
     port: 3306,
     username: 'root',
     password: '',
-    entities: [],
+    database: 'aula',
+    entities: [
+        Task
+    ],
     logging: true,
     synchronize: true
 })

@@ -128,6 +128,9 @@ O [Xampp](https://www.apachefriends.org/pt_br/download.html) é um software grat
 sudo chmod +x xampp-linux-x64-8.0.28-0-installer.run
 ./xampp-linux-x64-8.0.28-0-installer.run
 sudo /opt/lampp/lampp start
+
+sudo apt-get install phpmyadmin
+
 ```
 
 
@@ -209,26 +212,28 @@ export class Task {
 
 tasks/**task.service.ts**
 ```typescript
-import { getRepository } from 'typeorm';
-import { Task } from './task.entity';
+import { Task } from './entity/task.entity'
+import { myDataSource } from '../app-data-source'
 
 export class TaskService {
-  async getAllTasks() {
-    const taskRepository = getRepository(Task);
-    return await taskRepository.find();
-  }
 
-  async createTask(description: string) {
-    const taskRepository = getRepository(Task);
-    const newTask = new Task();
-    newTask.description = description;
-    await taskRepository.save(newTask);
-  }
+    taskRepository = myDataSource.getRepository(Task)
 
-  async deleteTask(id: number) {
-    const taskRepository = getRepository(Task);
-    await taskRepository.delete(id);
-  }
+    async getAllTasks() {
+        const task = await this.taskRepository.find()
+        return task
+    }
+
+    async createTask(description: string) {
+        const newTask = new Task()
+        newTask.description = description
+
+        return await this.taskRepository.save(newTask)
+    }
+
+    async deleteTask(id: number) {
+        return await this.taskRepository.delete(id)
+    }
 }
 ```
 
@@ -236,33 +241,33 @@ export class TaskService {
    - Neste arquivo, os controladores são definidos para lidar com as requisições HTTP. Cada controlador corresponde a uma rota específica. Os controladores são responsáveis por receber as requisições, chamar as operações de serviço apropriadas e enviar as respostas.
 tasks/**task.controller.ts**
 ```typescript
-import { Request, Response } from 'express';
-import { TaskService } from './task.service';
+import { Request, Response, json } from 'express'
+import { TaskService } from './task.service'
 
-const taskService = new TaskService();
+const taskService = new TaskService()
 
 export const getAllTasks = async (req: Request, res: Response) => {
-  const tasks = await taskService.getAllTasks();
-  res.json(tasks);
-};
+    const tasks = await taskService.getAllTasks()
+    res.json(tasks)
+}
 
 export const createTask = async (req: Request, res: Response) => {
-  const { description } = req.body;
-  if (!description) {
-    return res.status(400).json({ error: 'A descrição da tarefa é obrigatória.' });
-  }
-  await taskService.createTask(description);
-  res.status(201).json({ message: 'Tarefa adicionada com sucesso.' });
-};
+    const { description } = req.body
+    if (!description) {
+        return res.status(400).json({ error: 'A descrição da tarefa é obrigatória' })
+    }
+    await taskService.createTask(description)
+    res.status(201).json({ message: 'Tarefa adicionada com sucesso.' })
+}
 
 export const deleteTask = async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
-  if (!id) {
-    return res.status(400).json({ error: 'ID da tarefa inválido.' });
-  }
-  await taskService.deleteTask(id);
-  res.json({ message: 'Tarefa removida com sucesso.' });
-};
+    const id = parseInt(req.params.id)
+    if (!id) {
+        return res.status(400).json({ error: 'ID da tarefa inválido.' })
+    }
+    await taskService.deleteTask(id)
+    res.json({ message: 'Tarefa removida com sucesso.' })
+}
 ```
 
 **4. `task.module.ts`:**
