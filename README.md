@@ -102,8 +102,20 @@ npm init
 - Instale as dependências necessárias, incluindo o Express.js, o TypeORM, o MySQL e outras bibliotecas.
 
 ```bash
-npm install express typeorm reflect-metadata mysql nodemon
+npm install express @types/express typeorm reflect-metadata mysql nodemon ts-node
+npm i typescript --save-dev
 ```
+
+> para usar o typescript use: {
+    "compilerOptions": {
+        "lib": ["es5", "es6", "dom"],
+        "target": "es5",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
+    }
+}
 
 > Para gerar o .gitignore use: [gitignore.io](https://www.toptal.com/developers/gitignore)
 
@@ -121,20 +133,23 @@ sudo /opt/lampp/lampp start
 
 **Passo 4: Configuração do TypeORM**
 
-- Crie um arquivo de configuração para o TypeORM chamado **`ormconfig.json`** na raiz do projeto e configure-o com suas informações de conexão com o MySQL. Substitua `'your-mysql-host'`, `'your-username'`, `'your-password'` e `'your-database-name'` com suas configurações:
+- A configuração de uma fonte de dados (DataSource) para uma aplicação que utiliza o framework de mapeamento objeto-relacional (ORM) TypeORM, com conexão a um banco de dados MySQL. A constante `myDataSource` é criada como uma instância de DataSource, com os seguintes parâmetros de configuração: tipo de banco de dados (MySQL), host onde o banco de dados está localizado (localhost), número da porta (3306), nome de usuário (root), senha (vazia, o que não é recomendado em um ambiente de produção), uma lista vazia de entidades que representam tabelas no banco de dados, a ativação do registro de log (logging) e a sincronização automática com o banco de dados (synchronize). O ORM TypeORM utiliza essas configurações para estabelecer uma conexão com o banco de dados MySQL, mapear entidades e permitir operações de leitura e gravação de dados por meio de código TypeScript de forma simplificada e orientada a objetos. Certifique-se de que, em um ambiente de produção, a senha seja definida de forma segura e que as entidades do banco de dados sejam listadas para que o ORM saiba quais tabelas mapear.
 
-```json
-{
-  "type": "mysql",
-  "host": "your-mysql-host",
-  "port": 3306,
-  "username": "your-username",
-  "password": "your-password",
-  "database": "your-database-name",
-  "entities": ["src/**/*.entity.ts"],
-  "synchronize": true,
-  "logging": true
-}
+src/app-data-source.ts
+
+```typescript
+import { DataSource } from 'typeorm'
+
+export const myDataSource = new DataSource({
+    type: 'mysql',
+    host: 'localhost',
+    port: 3306,
+    username: 'root',
+    password: '',
+    entities: [],
+    logging: true,
+    synchronize: true
+})
 ```
 
 
@@ -275,7 +290,7 @@ Esta estrutura segue as melhores práticas para dividir a aplicação em módulo
 
 tasks/**main.module.ts**
 ```typescript
-import express from 'express';
+import * as express from 'express';
 import { createConnection } from 'typeorm';
 import taskModule from './tasks/task.module';
 
