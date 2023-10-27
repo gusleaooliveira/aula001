@@ -25,11 +25,9 @@ Nesta aula, vamos explorar os fundamentos do Node.js, entender como o motor V8 c
      - Comunidade ativa e suporte contínuo de desenvolvedores.
      - Flexibilidade para criar vários tipos de aplicativos, desde APIs RESTful até aplicativos em tempo real.
 
-Esta descrição detalhada deve fornecer aos alunos uma compreensão mais sólida do que é o Node.js e por que é uma escolha popular no desenvolvimento de aplicativos server-side.
+ 
 
-Claro, vou expandir a parte 2 para fornecer uma explicação mais detalhada sobre o motor V8:
-
-**II. Entendendo o V8  **
+**II. Entendendo o V8**
 
 **1. O que é o motor V8?**
    - O motor V8 é o componente fundamental por trás do funcionamento do Node.js, desenvolvido pela Google.
@@ -52,7 +50,17 @@ Claro, vou expandir a parte 2 para fornecer uma explicação mais detalhada sobr
      b. Coleta de lixo (garbage collection): O V8 gerencia a alocação e desalocação de memória de forma eficiente.
      c. Otimização de código: O V8 aplica otimizações como inline caching e eliminação de código morto para acelerar a execução do código.
 
-Esta explicação detalhada sobre o motor V8 ajuda os alunos a compreenderem como o Node.js é capaz de executar JavaScript de forma tão eficiente, contribuindo para o seu desempenho excepcional em ambientes server-side.   
+ **Event loop**
+
+* O event loop na V8 do Node.js é um componente fundamental que permite que o Node execute código de forma assíncrona e não bloqueante. Ele funciona da seguinte maneira:
+* Loop de Eventos: O event loop é um loop contínuo que espera e processa eventos.
+* Eventos: Eventos podem ser operações assíncronas, como leitura de arquivos, solicitações de rede, timers e interações de E/S.
+* Callbacks: Cada evento é associado a um callback, uma função que será executada quando o evento for processado.
+Pilha de Chamadas: O event loop mantém uma pilha de chamadas que contém as funções em execução.
+* Modelo Não Bloqueante: O Node executa operações de I/O de forma não bloqueante, permitindo que outras tarefas sejam executadas enquanto aguarda a conclusão da operação.
+* Pilha de Mensagens: Quando um evento é concluído, seu callback é colocado em uma pilha de mensagens para ser processado pelo event loop.
+* Microtarefas e Tarefas de Tempo: O event loop também lida com microtarefas e tarefas de tempo, permitindo a execução de código agendado e operações de alta prioridade.
+* Em resumo, o event loop na V8 do Node.js permite que o servidor execute operações de forma assíncrona e não bloqueante, garantindo alta eficiência e escalabilidade em aplicações de rede e E/S intensivas.
 
  
 
